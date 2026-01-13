@@ -1,1 +1,3 @@
 Set-ExecutionPolicy Bypass -Scope Process -Force
+cd $env:USERPROFILE\Downloads
+.\important-file-2.ps1
