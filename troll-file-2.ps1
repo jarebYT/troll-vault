@@ -1,82 +1,85 @@
 Add-Type -AssemblyName System.Windows.Forms
+Add-Type -AssemblyName System.Drawing
 Add-Type -AssemblyName System.Speech
 
-# === Configuration ===
+# ================= CONFIG =================
 $msgs = @(
-    "Oops… tu as laissé ton PC sans verrou ! 😏",
+    "Oops… tu as laissé ton PC sans verrou 😏",
     "Ton PC est officiellement trollé !",
-    "Appuie sur Échap si tu oses… 😎",
-    "Sécurité 101 : CTRL+L la prochaine fois !"
+    "Sécurité 101 : Windows + L la prochaine fois 😎",
+    "Appuie sur Échap si tu oses…"
 )
+
 $ttsLines = @(
-    "Tu es victime du troll ultime !",
-    "Verrouille ton PC la prochaine fois !",
-    "Haha, ton poste est sous contrôle… enfin presque !",
-    "Appuie sur Échap pour te libérer !"
+    "Tu es victime du troll ultime",
+    "Verrouille ton PC la prochaine fois",
+    "Haha, ton poste est sous contrôle",
+    "Appuie sur Échap pour te libérer"
 )
-$loopCount = 30  # nombre de répétitions
 
-$speak = New-Object System.Speech.Synthesis.SpeechSynthesizer
+$loopCount = 30
+$colors = @(
+    [System.Drawing.Color]::DarkRed,
+    [System.Drawing.Color]::DarkBlue,
+    [System.Drawing.Color]::DarkGreen,
+    [System.Drawing.Color]::DarkOrange
+)
 
-# === Fonctions ===
-function Set-FunnyWallpaper($path) {
-    Add-Type @"
-using System.Runtime.InteropServices;
-public class Wallpaper {
-    [DllImport("user32.dll", SetLastError = true)]
-    public static extern bool SystemParametersInfo(int uAction, int uParam, string lpvParam, int fuWinIni);
-}
-"@
-    [Wallpaper]::SystemParametersInfo(20, 0, $path, 3)
-}
+$speaker = New-Object System.Speech.Synthesis.SpeechSynthesizer
+$speaker.Rate = 0
 
-function Show-BlackScreen($duration) {
-    $form = New-Object System.Windows.Forms.Form
-    $form.WindowState = "Maximized"
-    $form.BackColor = "Black"
-    $form.TopMost = $true
-    $form.Add_KeyDown({ if ($_.KeyCode -eq "Escape") { $form.Close() } })
-    $form.Show()
-    Start-Sleep -Seconds $duration
-    $form.Close()
-}
+# ================= FENÊTRE PLEIN ÉCRAN =================
+$form = New-Object System.Windows.Forms.Form
+$form.FormBorderStyle = 'None'
+$form.WindowState = 'Maximized'
+$form.TopMost = $true
+$form.BackColor = [System.Drawing.Color]::Black
+$form.KeyPreview = $true
 
-function Show-FakeResScreen($color, $duration) {
-    $form = New-Object System.Windows.Forms.Form
-    $form.WindowState = "Maximized"
-    $form.BackColor = $color
-    $form.TopMost = $true
-    $form.Add_KeyDown({ if ($_.KeyCode -eq "Escape") { $form.Close() } })
-    $form.Show()
-    Start-Sleep -Seconds $duration
-    $form.Close()
-}
+$form.Add_KeyDown({
+    if ($_.KeyCode -eq 'Escape') {
+        $speaker.SpeakAsyncCancelAll()
+        $form.Close()
+    }
+})
 
-# === Boucle principale ===
-for ($i=0; $i -lt $loopCount; $i++) {
+# ================= TIMER =================
+$index = 0
+$timer = New-Object System.Windows.Forms.Timer
+$timer.Interval = 1000  # 1 seconde
 
-    # Afficher un message aléatoire
-    $msg = Get-Random -InputObject $msgs
-    Start-Job -ScriptBlock { param($m) [System.Windows.Forms.MessageBox]::Show($m,"Troll IT",0) } -ArgumentList $msg
+$timer.Add_Tick({
 
-    # TTS aléatoire
-    $line = Get-Random -InputObject $ttsLines
-    Start-Job -ScriptBlock { param($l) 
-        Add-Type -AssemblyName System.Speech
-        $s = New-Object System.Speech.Synthesis.SpeechSynthesizer
-        $s.Speak($l)
-    } -ArgumentList $line
+    if ($index -ge $loopCount) {
+        $timer.Stop()
+        [System.Windows.Forms.MessageBox]::Show(
+            "Le troll ultime est terminé 😜",
+            "Troll IT",
+            [System.Windows.Forms.MessageBoxButtons]::OK,
+            [System.Windows.Forms.MessageBoxIcon]::Information
+        )
+        $form.Close()
+        return
+    }
 
-    # Écran noir toutes les 10 sec
-    if ($i % 2 -eq 0) { Show-BlackScreen 3 }
+    # Changement couleur (RGB instantané)
+    $form.BackColor = Get-Random $colors
 
-    # Simuler résolution (fenêtre colorée) toutes les 5 sec
-    $colors = @("DarkBlue","DarkRed","DarkGreen","DarkOrange")
-    $color = Get-Random -InputObject $colors
-    Show-FakeResScreen $color 2
+    # Message popup (1 fois sur 3)
+    if ($index % 3 -eq 0) {
+        $msg = Get-Random $msgs
+        [System.Windows.Forms.MessageBox]::Show($msg, "Troll IT")
+    }
 
-    Start-Sleep -Seconds 5
-}
+    # TTS (asynchrone, fluide)
+    if ($index % 2 -eq 0) {
+        $line = Get-Random $ttsLines
+        $speaker.SpeakAsync($line)
+    }
 
-# Message final
-[System.Windows.Forms.MessageBox]::Show("Le troll ultime est terminé 😜 Appuie sur Échap pour fermer toutes les fenêtres restantes","Troll IT",0)
+    $index++
+})
+
+# ================= LANCEMENT =================
+$timer.Start()
+[System.Windows.Forms.Application]::Run($form)
