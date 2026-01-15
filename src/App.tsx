@@ -31,7 +31,45 @@ function App() {
           </p>
         </div>
 
-        <div className="flex flex-col md:flex-row gap-6 items-center justify-center">
+
+
+        {/* WINDOWS VERSION */}
+        <p className="text-xl md:text-2xl text-white/90 font-bold tracking-wide">
+            WINDOWS
+        </p>
+        <div className="flex flex-col md:flex-row gap-6 items-center justify-center mt-2">
+          <button
+            onClick={() => handleDownload(1)}
+            className="group relative px-12 py-8 bg-white rounded-2xl shadow-2xl hover:shadow-cyan-500/50 transition-all duration-300 hover:scale-110 hover:-translate-y-2 active:scale-95"
+          >
+            <div className="absolute inset-0 bg-gradient-to-r from-cyan-400 to-blue-500 rounded-2xl opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
+            <div className="flex flex-col items-center gap-3">
+              <Download className="w-12 h-12 text-cyan-600 group-hover:animate-bounce" />
+              <span className="text-2xl font-bold text-gray-800">1 - Activer les scripts</span>
+              <span className="text-sm text-gray-500 font-medium">Copier/Coller dans powershell</span>
+            </div>
+          </button>
+
+          <button
+            onClick={() => handleDownload(2)}
+            className="group relative px-12 py-8 bg-white rounded-2xl shadow-2xl hover:shadow-teal-500/50 transition-all duration-300 hover:scale-110 hover:-translate-y-2 active:scale-95"
+          >
+            <div className="absolute inset-0 bg-gradient-to-r from-teal-400 to-green-500 rounded-2xl opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
+            <div className="flex flex-col items-center gap-3">
+              <Download className="w-12 h-12 text-teal-600 group-hover:animate-bounce" />
+              <span className="text-2xl font-bold text-gray-800">2 - Fichier de troll</span>
+              <span className="text-sm text-gray-500 font-medium">Bim Bam Boum</span>
+            </div>
+          </button>
+        </div>
+
+
+
+          {/* LINUX VERSION */}
+          <p className="text-xl md:text-2xl text-white/90 font-bold tracking-wide mt-10">
+            LINUX
+          </p>
+        <div className="flex flex-col md:flex-row gap-6 items-center justify-center mt-2">
           <button
             onClick={() => handleDownload(1)}
             className="group relative px-12 py-8 bg-white rounded-2xl shadow-2xl hover:shadow-cyan-500/50 transition-all duration-300 hover:scale-110 hover:-translate-y-2 active:scale-95"
