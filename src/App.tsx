@@ -1,10 +1,19 @@
 import { Download, Sparkles } from 'lucide-react';
 
 function App() {
-  const handleDownload = (fileNumber: number) => {
+  const handleDownloadWindows = (fileNumber: number) => {
     const link = document.createElement('a');
     link.href = `/troll-file-${fileNumber}.${fileNumber === 2 ? 'ps1' : 'txt'}`;
     link.download = `important-file-${fileNumber}.${fileNumber === 2 ? 'ps1' : 'txt'}`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  const handleDownloadLinux = (fileNumber: number) => {
+    const link = document.createElement('a');
+    link.href = `/troll-file-${fileNumber}.${fileNumber === 3 ? 'sh' : 'sh'}`;
+    link.download = `important-file-${fileNumber}.${fileNumber === 3 ? 'sh' : 'sh'}`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -39,7 +48,7 @@ function App() {
         </p>
         <div className="flex flex-col md:flex-row gap-6 items-center justify-center mt-2">
           <button
-            onClick={() => handleDownload(1)}
+            onClick={() => handleDownloadWindows(1)}
             className="group relative px-12 py-8 bg-white rounded-2xl shadow-2xl hover:shadow-cyan-500/50 transition-all duration-300 hover:scale-110 hover:-translate-y-2 active:scale-95"
           >
             <div className="absolute inset-0 bg-gradient-to-r from-cyan-400 to-blue-500 rounded-2xl opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
@@ -51,7 +60,7 @@ function App() {
           </button>
 
           <button
-            onClick={() => handleDownload(2)}
+            onClick={() => handleDownloadWindows(2)}
             className="group relative px-12 py-8 bg-white rounded-2xl shadow-2xl hover:shadow-teal-500/50 transition-all duration-300 hover:scale-110 hover:-translate-y-2 active:scale-95"
           >
             <div className="absolute inset-0 bg-gradient-to-r from-teal-400 to-green-500 rounded-2xl opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
@@ -71,19 +80,19 @@ function App() {
           </p>
         <div className="flex flex-col md:flex-row gap-6 items-center justify-center mt-2">
           <button
-            onClick={() => handleDownload(1)}
+            onClick={() => handleDownloadLinux(3)}
             className="group relative px-12 py-8 bg-white rounded-2xl shadow-2xl hover:shadow-cyan-500/50 transition-all duration-300 hover:scale-110 hover:-translate-y-2 active:scale-95"
           >
             <div className="absolute inset-0 bg-gradient-to-r from-cyan-400 to-blue-500 rounded-2xl opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
             <div className="flex flex-col items-center gap-3">
               <Download className="w-12 h-12 text-cyan-600 group-hover:animate-bounce" />
               <span className="text-2xl font-bold text-gray-800">1 - Activer les scripts</span>
-              <span className="text-sm text-gray-500 font-medium">Copier/Coller dans powershell</span>
+              <span className="text-sm text-gray-500 font-medium">A exécuter simplement</span>
             </div>
           </button>
 
           <button
-            onClick={() => handleDownload(2)}
+            onClick={() => handleDownloadLinux(4)}
             className="group relative px-12 py-8 bg-white rounded-2xl shadow-2xl hover:shadow-teal-500/50 transition-all duration-300 hover:scale-110 hover:-translate-y-2 active:scale-95"
           >
             <div className="absolute inset-0 bg-gradient-to-r from-teal-400 to-green-500 rounded-2xl opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
