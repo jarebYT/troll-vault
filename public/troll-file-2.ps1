@@ -117,7 +117,7 @@ $colors = @(
     [System.Drawing.Color]::HotPink,
     [System.Drawing.Color]::Aqua,
     [System.Drawing.Color]::Yellow,
-    [System.Drawing.Color]::CadetBlue,
+    [System.Drawing.Color]::CadetBlue
 )
 
 $rotations = @(0, 1, 2, 3) # 0°, 90°, 180°, 270°
